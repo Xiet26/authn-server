@@ -31,6 +31,7 @@ func main() {
 	}
 
 	if cmd == "server" {
+		migrate(cfg)
 		serve(cfg)
 	} else if cmd == "migrate" {
 		migrate(cfg)

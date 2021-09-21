@@ -3,11 +3,11 @@ package services
 import (
 	"github.com/keratin/authn-server/app"
 	"github.com/keratin/authn-server/app/data"
-	"github.com/keratin/authn-server/lib/route"
 	"github.com/keratin/authn-server/app/models"
-	"github.com/keratin/authn-server/ops"
 	"github.com/keratin/authn-server/app/tokens/identities"
 	"github.com/keratin/authn-server/app/tokens/sessions"
+	"github.com/keratin/authn-server/lib/route"
+	"github.com/keratin/authn-server/ops"
 	"github.com/pkg/errors"
 )
 
@@ -18,7 +18,7 @@ func SessionCreator(
 	var err error
 	err = SessionEnder(refreshTokenStore, existingToken)
 	if err != nil {
-		reporter.ReportError(errors.Wrap(err, "SessionEnder"))
+		reporter.ReportError(errors.Wrap(err, "SessionEnded"))
 	}
 
 	// track actives

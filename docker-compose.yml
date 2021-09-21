@@ -3,34 +3,32 @@ services:
   redis:
     image: redis
     ports:
-      - "${REDIS_PORT:-8701}:6379"
-
+      - "8701:6379"
   mysql:
     image: mysql:5.7
     ports:
-      - "${MYSQL_PORT:-8702}:3306"
+      - "8702:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - .:/test-app
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_ROOT_PASSWORD
-
-  postgres:
-    image: postgres:9.6
-    ports:
-      - "${POSTGRES_PORT:-8703}:5432"
-    environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_DB
-
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user_testdb
+      MYSQL_PASSWORD: password
+# Names our volume
   server:
-    image: keratin/authn-server:latest
+    image: authenticator-service:latest
     ports:
-      - "7002:3000"
+        - "7002:3000"
     environment:
       - APP_DOMAINS
       - AUTHN_URL
       - SECRET_KEY_BASE
-      - DATABASE_URL=sqlite3://localhost/dev
-      - REDIS_URL=redis://redis:6379/11
+      - DATABASE_URL
+      - REDIS_URL
     depends_on:
       - redis
+      - mysql
+volumes:
+  db_data:
